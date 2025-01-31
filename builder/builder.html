@@ -3,85 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="jquery-ui-1.14.1.custom/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="jquery-ui-1.14.1.custom/jquery-ui.min.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/bulma.css">
     <title>WebBuild</title>
 </head>
 <body>
     <div id="itemssidebar" style="text-align: center; height:100%;width:20%;position:fixed!important;z-index:1;overflow:auto">
-        <h2 class="title">Items</h2>
-        <p>Text Elements</p><hr>
-        <p><button class="button" class="button" onclick="addItem('heading1')" title="Text element typically used for website titles.">Heading 1</button></p>
-        <p><button class="button" onclick="addItem('heading2')" title="Text element typically used for section titles.">Heading 2</button></p>
-        <p><button class="button" onclick="addItem('heading3')" title="Text element typically used for subsection titles.">Heading 3</button></p>
-        <p><button class="button" onclick="addItem('text')" title="Standard text element for paragraphs.">Text</button></p>
-        <br>
-        <p>Interactive Elements</p><hr>
-        <p><button class="button" onclick="addItem('link')" title="Hyperlink element for navigation.">Link</button></p>
-        <p><button class="button" onclick="addItem('button')" title="Clickable button for interactions.">Button</button></p>
-        <p><button class="button" onclick="addItem('inputfield')" title="Field for user input.">Input Field</button></p>
-        <p><button class="button" onclick="addItem('inputbox')" title="Box for multiline user input.">Input Box</button></p>
-        <p><button class="button" onclick="addItem('checkbox')" title="Checkbox for selection.">Checkbox</button></p>
-        <p><button class="button" onclick="addItem('progressbar')" title="Visual indicator of progress.">Progress Bar</button></p>
-        <br>
-        <p>Structural Elements</p><hr>
-        <p><button class="button" onclick="addItem('footer')" title="Footer section of the webpage.">Footer</button></p>
-        <p><button class="button" onclick="addItem('separator')" title="Horizontal line for separation of content.">Separator</button></p>
-        <p><button class="button" onclick="addItem('card')" title="Card element for grouping related content.">Card</button></p>
-    
-        <p>Data Elements</p><hr>
-        <p><button class="button" onclick="addItem('table')" title="Table for displaying tabular data.">Table</button></p>
-        <p><button class="button" onclick="addItem('image')" title="Image element for displaying pictures.">Image</button></p>
-        <br>
-        <p>Embedded Elements</p><hr>
-        <p><button class="button" onclick="addItem('websiteembed')" title="Embed another website within the page.">Website Embed</button></p>
-        <p><button class="button" onclick="addItem('customhtml')" title="Add custom HTML content.">Custom HTML</button></p>
-        <hr>
+        <h1 class="title">Items</h1>
+        <select id="categoryDropdown" onchange="switchCategory()" style="margin-bottom: 10px;">
+            <option value="text">Text Elements</option>
+            <option value="interactive">Interactive Elements</option>
+            <option value="structural">Structural Elements</option>
+            <option value="data">Data Elements</option>
+            <option value="embedded">Embedded Elements</option>
+        </select>
+
+        <div id="textElements" class="category">
+            <p>Text Elements</p>
+            <p><button class="button" onclick="addItem('heading1')" title="Text element typically used for website titles.">Heading 1</button></p>
+            <p><button class="button" onclick="addItem('heading2')" title="Text element typically used for section titles.">Heading 2</button></p>
+            <p><button class="button" onclick="addItem('heading3')" title="Text element typically used for subsection titles.">Heading 3</button></p>
+            <p><button class="button" onclick="addItem('text')" title="Standard text element for paragraphs.">Text</button></p>
+        </div>
+
+        <div id="interactiveElements" class="category" style="display:none;">
+            <p>Interactive Elements</p>
+            <p><button class="button" onclick="addItem('link')" title="Hyperlink element for navigation.">Link</button></p>
+            <p><button class="button" onclick="addItem('button')" title="Clickable button for interactions.">Button</button></p>
+            <p><button class="button" onclick="addItem('inputfield')" title="Field for user input.">Input Field</button></p>
+            <p><button class="button" onclick="addItem('inputbox')" title="Box for multiline user input.">Input Box</button></p>
+            <p><button class="button" onclick="addItem('checkbox')" title="Checkbox for selection.">Checkbox</button></p>
+            <p><button class="button" onclick="addItem('progressbar')" title="Visual indicator of progress.">Progress Bar</button></p>
+        </div>
+
+        <div id="structuralElements" class="category" style="display:none;">
+            <p>Structural Elements</p>
+            <p><button class="button" onclick="addItem('footer')" title="Footer section of the webpage.">Footer</button></p>
+            <p><button class="button" onclick="addItem('separator')" title="Horizontal line for separation of content.">Separator</button></p>
+            <p><button class="button" onclick="addItem('card')" title="Card element for grouping related content.">Card</button></p>
+        </div>
+
+        <div id="dataElements" class="category" style="display:none;">
+            <p>Data Elements</p>
+            <p><button class="button" onclick="addItem('table')" title="Table for displaying tabular data.">Table</button></p>
+            <p><button class="button" onclick="addItem('image')" title="Image element for displaying pictures.">Image</button></p>
+        </div>
+
+        <div id="embeddedElements" class="category" style="display:none;">
+            <p>Embedded Elements</p>
+            <p><button class="button" onclick="addItem('websiteembed')" title="Embed another website within the page.">Website Embed</button></p>
+            <p><button class="button" onclick="addItem('customhtml')" title="Add custom HTML content.">Custom HTML</button></p>
+        </div>
     </div>
-    
-    
+
     <div id="navigationbar" style="margin-left:20%;width:100%;overflow:hidden;padding:5px;">
         <div onclick="exportToHTML()" class="button" title="Exports your website to HTML code.">Export to HTML</div>
         <div onclick="deleteItem()" class="button" title="Allows you to delete an item.">Delete Item</div>
         <div onclick="editSetting()" class="button" title="Allows you to change any HTML property of an item.">Edit Setting</div>
         <div onclick="save()" class="button" title="Save's your site to the WebBuild panel.">Save</div>
-        <div id="togglemodebutton" onclick="toggleMode()" class="button" title="Opens the JavaScript code editor.">Code</div>
-        <div onclick="window.location.assign('index.html')" class="button" title="Redericts you to the homepage.">Panel</div>
     </div>
-      
-    <div id="websitepreview" style="margin-left:20%;text-align: center;"><script id="websitepreviewjs"></script></div>
-    <div id="jseditor" style="display: none;"><textarea spellcheck="false" style="width: 100%; resize:vertical;" placeholder="JavaScript code here..." id="jscode"></textarea> <p style="width: 100%;" class="button" onclick="saveCode()">Save</p></div>
 
-    <div id="alertDialog" title="Alert" style="display:none;">
+    <div id="websitepreview" style="margin-left:20%; padding:10px;"></div>
+    <div id="jseditor" style="display:none;">
+        <textarea id="jscode" style="width:100%; height:300px;"></textarea>
+        <button onclick="saveCode()">Save Code</button>
+    </div>
+
+    <div id="alertDialog" title="Alert">
         <p id="alertMessage"></p>
     </div>
-    <div id="confirmDialog" title="Confirm" style="display:none;">
+    <div id="confirmDialog" title="Confirm">
         <p id="confirmMessage"></p>
     </div>
-    <div id="promptDialog" title="Prompt" style="display:none;">
+    <div style="display: none;" id="promptDialog" title="Prompt">
         <p id="promptMessage"></p>
-        <input type="text" id="promptInput" style="width:100%;" />
+        <input type="text" id="promptInput">
     </div>
-    <div id="localStorageNotice" style="background-color: #f8f8f8; padding: 10px; text-align: center; font-size: 14px; position: relative;">
-        This site stores your nickname and site content locally in your browser to enable editing and personalization features. No data is sent to a server.
-        <button class="button" id="closeNotice" style="background-color: transparent; border: none; font-size: 14px; cursor: pointer; position: absolute; right: 5px; top: -5px;"><strong>&times;</strong></button>
+
+    <script src="builder.js"></script>
 </body>
-
-<script src="builder.js"></script>
-<script>
-    document.getElementById('closeNotice').addEventListener('click', function() {
-var notice = document.getElementById('localStorageNotice');
-notice.style.display = 'none';
-localStorage.setItem('noticeClosed', 'true');
-});
-
-window.onload = function() {
-if (localStorage.getItem('noticeClosed') === 'true') {
-    document.getElementById('localStorageNotice').style.display = 'none';
-}
-};
-
-</script>
-
 </html>

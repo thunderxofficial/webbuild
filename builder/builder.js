@@ -20,13 +20,20 @@ $(document).ready(function() {
     let newUrl = window.location.origin + window.location.pathname + '?' + urlParams.toString();
     window.history.replaceState(null, '', newUrl);
     preview.innerHTML = sitecontent;
-
-
 });
 
 if (!localStorage.getItem("setupCompleted")) {
     location.assign("config/index.html");
 };
+
+function switchCategory() {
+    var selectedCategory = document.getElementById("categoryDropdown").value;
+    var categories = document.getElementsByClassName("category");
+    for (var i = 0; i < categories.length; i++) {
+        categories[i].style.display = "none";
+    }
+    document.getElementById(selectedCategory + "Elements").style.display = "block";
+}
 
 function save() {
     if(preview.innerHTML) {
@@ -79,6 +86,7 @@ function showConfirm(message, callback) {
         }
     });
 }
+
 function showPrompt(message, callback) {
     $("#promptMessage").text(message);
 
@@ -98,7 +106,6 @@ function showPrompt(message, callback) {
         }
     });
 }
-
 
 function deleteItem() {
     if (preview.innerHTML != "") {
@@ -317,22 +324,21 @@ function addItem(item) {
                         });
                     });
                     break;
-                    case "checkbox":
-                        showPrompt("Name: ", function(name) {
-                            showPrompt("Label: ", function(label) {
-                                var element = document.createElement("div");
-                                element.id = name;
-                                var labelElement = document.createElement("label");
-                                labelElement.classList.add("checkbox");
-                                var input = document.createElement("input");
-                                input.type = "checkbox";
-                                labelElement.insertBefore(input, labelElement.firstChild);
-                                labelElement.appendChild(document.createTextNode(label));
-                                element.appendChild(labelElement);
-                                preview.appendChild(element);
-                            });
+                case "checkbox":
+                    showPrompt("Name: ", function(name) {
+                        showPrompt("Label: ", function(label) {
+                            var element = document.createElement("div");
+                            element.id = name;
+                            var labelElement = document.createElement("label");
+                            labelElement.classList.add("checkbox");
+                            var input = document.createElement("input");
+                            input.type = "checkbox";
+                            labelElement.insertBefore(input, labelElement.firstChild);
+                            labelElement.appendChild(document.createTextNode(label));
+                            element.appendChild(labelElement);
+                            preview.appendChild(element);
                         });
-                    
+                    });
                     break;
                 case "card":
                     showPrompt("Name: ", function(name) {
