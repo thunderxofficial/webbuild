@@ -6,6 +6,8 @@ var navbar = document.getElementById("navigationbar");
 var previewjs = document.getElementById("websitepreviewjs");
 var jseditorcode = document.getElementById("jscode");
 
+"use strict";const HtmlSanitizer=new function(){const e={A:!0,ABBR:!0,B:!0,BLOCKQUOTE:!0,BODY:!0,BR:!0,CENTER:!0,CODE:!0,DD:!0,DIV:!0,DL:!0,DT:!0,EM:!0,FONT:!0,H1:!0,H2:!0,H3:!0,H4:!0,H5:!0,H6:!0,HR:!0,I:!0,IMG:!0,LABEL:!0,LI:!0,OL:!0,P:!0,PRE:!0,SMALL:!0,SOURCE:!0,SPAN:!0,STRONG:!0,SUB:!0,SUP:!0,TABLE:!0,TBODY:!0,TR:!0,TD:!0,TH:!0,THEAD:!0,UL:!0,U:!0,VIDEO:!0},t={FORM:!0,"GOOGLE-SHEETS-HTML-ORIGIN":!0},n={align:!0,color:!0,controls:!0,height:!0,href:!0,id:!0,src:!0,style:!0,target:!0,title:!0,type:!0,width:!0},r={"background-color":!0,color:!0,"font-size":!0,"font-weight":!0,"text-align":!0,"text-decoration":!0,width:!0},l=["http:","https:","data:","m-files:","file:","ftp:","mailto:","pw:"],i={href:!0,action:!0},a=new DOMParser;function o(e,t){for(let n=0;n<t.length;n++)if(0==e.indexOf(t[n]))return!0;return!1}this.SanitizeHtml=function(s,d){if(""==(s=s.trim()))return"";if("<br>"==s)return"";-1==s.indexOf("<body")&&(s="<body>"+s+"</body>");let m=a.parseFromString(s,"text/html");"BODY"!==m.body.tagName&&m.body.remove(),"function"!=typeof m.createElement&&m.createElement.remove();let c=function a(s){let c;if(s.nodeType==Node.TEXT_NODE)c=s.cloneNode(!0);else if(s.nodeType==Node.ELEMENT_NODE&&(e[s.tagName]||t[s.tagName]||d&&s.matches(d))){c=t[s.tagName]?m.createElement("DIV"):m.createElement(s.tagName);for(let e=0;e<s.attributes.length;e++){let t=s.attributes[e];if(n[t.name])if("style"==t.name)for(let e=0;e<s.style.length;e++){let t=s.style[e];r[t]&&c.style.setProperty(t,s.style.getPropertyValue(t))}else{if(i[t.name]&&t.value.indexOf(":")>-1&&!o(t.value,l))continue;c.setAttribute(t.name,t.value)}}for(let e=0;e<s.childNodes.length;e++){let t=a(s.childNodes[e]);c.appendChild(t,!1)}if(("SPAN"==c.tagName||"B"==c.tagName||"I"==c.tagName||"U"==c.tagName)&&""==c.innerHTML.trim())return m.createDocumentFragment()}else c=m.createDocumentFragment();return c}(m.body);return c.innerHTML.replace(/<br[^>]*>(\S)/g,"<br>\n$1").replace(/div><div/g,"div>\n<div")},this.AllowedTags=e,this.AllowedAttributes=n,this.AllowedCssStyles=r,this.AllowedSchemas=l};
+
 $(document).ready(function() {
     $("#websitepreview").sortable();
     $("#websitepreview").disableSelection();
@@ -35,9 +37,22 @@ function switchCategory() {
     document.getElementById(selectedCategory + "Elements").style.display = "block";
 }
 
+function updateSettings() {
+    var bgColor = HtmlSanitizer.SanitizeHtml(document.getElementById("bgColor").value);
+    var mainColor = HtmlSanitizer.SanitizeHtml(document.getElementById("mainColor").value);
+    var siteTitle = HtmlSanitizer.SanitizeHtml(document.getElementById("siteTitle").value);
+
+    document.body.style.backgroundColor = bgColor;
+    document.body.style.color = mainColor;
+    document.title = siteTitle;
+}
+
 function save() {
     if(preview.innerHTML) {
-        showPrompt("Enter the site's name below:", save2);
+        showPrompt("Enter the site's name below:", function(input) {
+            input = HtmlSanitizer.SanitizeHtml(input);
+            save2(input);
+        });
     } else {
         showAlert("Error: no items added to the website.")
     }
@@ -96,6 +111,7 @@ function showPrompt(message, callback) {
         buttons: {
             Ok: function() {
                 var input = $("#promptInput").val();
+                input = HtmlSanitizer.SanitizeHtml(input);
                 $(this).dialog("close");
                 callback(input);
             },
@@ -110,6 +126,7 @@ function showPrompt(message, callback) {
 function deleteItem() {
     if (preview.innerHTML != "") {
         showPrompt("Name: ", function(name) {
+            name = HtmlSanitizer.SanitizeHtml(name);
             if (name) {
                 var item = document.getElementById(name);
                 if (item) {
@@ -143,7 +160,7 @@ function exportToHTML() {
             >
             <title>Website</title>
         </head>
-        <body class="has-text-centered">
+        <body class="has-text-centered" style="background-color: ${document.body.style.backgroundColor}; color: ${document.body.style.color};">
             ${preview.innerHTML}
         </body>
         </html>`;
@@ -163,10 +180,13 @@ function saveCode() {
 
 function editSetting() {
     showPrompt("Name: ", function(name) {
+        name = HtmlSanitizer.SanitizeHtml(name);
         if (name) {
             showPrompt("Setting (Property): ", function(setting) {
+                setting = HtmlSanitizer.SanitizeHtml(setting);
                 if (setting) {
                     showPrompt("Setting (Property) new value: ", function(settingValue) {
+                        settingValue = HtmlSanitizer.SanitizeHtml(settingValue);
                         if (settingValue) {
                             document.getElementById(name)[setting] = settingValue;
                         }
@@ -183,7 +203,9 @@ function addItem(item) {
             switch(item) {
                 case "heading1":
                     showPrompt("Name: ", function(name) {
+                        name = HtmlSanitizer.SanitizeHtml(name);
                         showPrompt("Text: ", function(text) {
+                            text = HtmlSanitizer.SanitizeHtml(text);
                             var element = document.createElement("h1");
                             element.id = name;
                             element.innerText = text;
@@ -194,7 +216,9 @@ function addItem(item) {
                     break;
                 case "heading2":
                     showPrompt("Name: ", function(name) {
+                        name = HtmlSanitizer.SanitizeHtml(name);
                         showPrompt("Text: ", function(text) {
+                            text = HtmlSanitizer.SanitizeHtml(text);
                             var element = document.createElement("h2");
                             element.id = name;
                             element.innerText = text;
@@ -205,7 +229,9 @@ function addItem(item) {
                     break;
                 case "text":
                     showPrompt("Name: ", function(name) {
+                        name = HtmlSanitizer.SanitizeHtml(name);
                         showPrompt("Text: ", function(text) {
+                            text = HtmlSanitizer.SanitizeHtml(text);
                             var element = document.createElement("p");
                             element.id = name;
                             element.innerText = text;
@@ -215,8 +241,11 @@ function addItem(item) {
                     break;
                 case "link":
                     showPrompt("Name: ", function(name) {
+                        name = HtmlSanitizer.SanitizeHtml(name);
                         showPrompt("Text: ", function(text) {
+                            text = HtmlSanitizer.SanitizeHtml(text);
                             showPrompt("Link: ", function(link) {
+                                link = HtmlSanitizer.SanitizeHtml(link);
                                 var element = document.createElement("p");
                                 element.id = name;
                                 var linkElement = document.createElement("a");
@@ -231,8 +260,11 @@ function addItem(item) {
                     break;
                 case "button":
                     showPrompt("Name: ", function(name) {
+                        name = HtmlSanitizer.SanitizeHtml(name);
                         showPrompt("Text: ", function(text) {
+                            text = HtmlSanitizer.SanitizeHtml(text);
                             showPrompt("Link: ", function(link) {
+                                link = HtmlSanitizer.SanitizeHtml(link);
                                 var buttonElement = document.createElement("a");
                                 buttonElement.id = name;
                                 buttonElement.innerText = text;
@@ -246,7 +278,9 @@ function addItem(item) {
                     break;
                 case "inputfield":
                     showPrompt("Name: ", function(name) {
+                        name = HtmlSanitizer.SanitizeHtml(name);
                         showPrompt("Placeholder: ", function(placeholder) {
+                            placeholder = HtmlSanitizer.SanitizeHtml(placeholder);
                             var element = document.createElement("input");
                             element.id = name;
                             element.placeholder = placeholder;
@@ -257,7 +291,9 @@ function addItem(item) {
                     break;
                 case "inputbox":
                     showPrompt("Name: ", function(name) {
+                        name = HtmlSanitizer.SanitizeHtml(name);
                         showPrompt("Placeholder: ", function(placeholder) {
+                            placeholder = HtmlSanitizer.SanitizeHtml(placeholder);
                             var element = document.createElement("textarea");
                             element.id = name;
                             element.placeholder = placeholder;
@@ -268,7 +304,9 @@ function addItem(item) {
                     break;
                 case "footer":
                     showPrompt("Name: ", function(name) {
+                        name = HtmlSanitizer.SanitizeHtml(name);
                         showPrompt("Copyright notice (use &copy; for the copyright sign): ", function(copyrightnotice) {
+                            copyrightnotice = HtmlSanitizer.SanitizeHtml(copyrightnotice);
                             var element = document.createElement("footer");
                             element.id = name;
                             element.innerText = copyrightnotice;
@@ -279,6 +317,7 @@ function addItem(item) {
                     break;
                 case "separator":
                     showPrompt("Name: ", function(name) {
+                        name = HtmlSanitizer.SanitizeHtml(name);
                         var element = document.createElement("hr");
                         element.id = name;
                         preview.appendChild(element);
@@ -289,9 +328,13 @@ function addItem(item) {
                     break;
                 case "image":
                     showPrompt("Name: ", function(name) {
+                        name = HtmlSanitizer.SanitizeHtml(name);
                         showPrompt("Image URL: ", function(image) {
+                            image = HtmlSanitizer.SanitizeHtml(image);
                             showPrompt("Image width: ", function(width) {
+                                width = HtmlSanitizer.SanitizeHtml(width);
                                 showPrompt("Image height: ", function(height) {
+                                    height = HtmlSanitizer.SanitizeHtml(height);
                                     var element = document.createElement("img");
                                     element.id = name;
                                     element.src = image;
@@ -305,7 +348,9 @@ function addItem(item) {
                     break;
                 case "websiteembed":
                     showPrompt("Name: ", function(name) {
+                        name = HtmlSanitizer.SanitizeHtml(name);
                         showPrompt("Website URL: ", function(website) {
+                            website = HtmlSanitizer.SanitizeHtml(website);
                             var element = document.createElement("iframe");
                             element.id = name;
                             element.frameborder = "0px";
@@ -316,7 +361,9 @@ function addItem(item) {
                     break;
                 case "customhtml":
                     showPrompt("Name: ", function(name) {
+                        name = HtmlSanitizer.SanitizeHtml(name);
                         showPrompt("Custom HTML: ", function(html) {
+                            html = HtmlSanitizer.SanitizeHtml(html);
                             var element = document.createElement("div");
                             element.id = name;
                             element.innerHTML = html;
@@ -326,7 +373,9 @@ function addItem(item) {
                     break;
                 case "checkbox":
                     showPrompt("Name: ", function(name) {
+                        name = HtmlSanitizer.SanitizeHtml(name);
                         showPrompt("Label: ", function(label) {
+                            label = HtmlSanitizer.SanitizeHtml(label);
                             var element = document.createElement("div");
                             element.id = name;
                             var labelElement = document.createElement("label");
@@ -342,8 +391,11 @@ function addItem(item) {
                     break;
                 case "card":
                     showPrompt("Name: ", function(name) {
+                        name = HtmlSanitizer.SanitizeHtml(name);
                         showPrompt("Title: ", function(title) {
+                            title = HtmlSanitizer.SanitizeHtml(title);
                             showPrompt("Content (You can use HTML): ", function(content) {
+                                content = HtmlSanitizer.SanitizeHtml(content);
                                 var element = document.createElement("div");
                                 element.id = name;
                                 element.classList.add("card");
@@ -361,7 +413,9 @@ function addItem(item) {
                     break;
                 case "progressbar":
                     showPrompt("Name: ", function(name) {
+                        name = HtmlSanitizer.SanitizeHtml(name);
                         showPrompt("Amount (set to 0 if you want an animation to play): ", function(amount) {
+                            amount = HtmlSanitizer.SanitizeHtml(amount);
                             var element = document.createElement("progress");
                             element.id = name;
                             element.max = 100;
