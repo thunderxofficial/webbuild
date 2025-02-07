@@ -11,7 +11,7 @@ const button1 = document.getElementById("button 1");
   
     _0x1a3b.onerror = function() {
       alert('It seems that you are using an ad blocker. Please disable it to help us analyze our website traffic.');
-      window['location']['href'] = 'https://www.wikihow.com/Disable-AdBlock';
+      window['location']['href'] = '/adblocknotice.html';
     };
   
     document['head']['appendChild'](_0x1a3b);
