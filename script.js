@@ -2,7 +2,7 @@ const button1 = document.getElementById("button 1");
 
 (function() {
     var _0x1a3b = document.createElement('script');
-    _0x1a3b.src = 'https://doubleclick.com';
+    _0x1a3b.src = 'https://securepubads.g.doubleclick.net/tag/js/gpt.js';
     _0x1a3b.async = true;
   
     _0x1a3b.onload = function() {
