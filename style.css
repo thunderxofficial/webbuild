@@ -1,0 +1,90 @@
+/* Custom styles for a clean, modern homepage */
+
+/* Global Background */
+body {
+    background: #f4f4f4;
+  }
+  
+  /* HERO SECTION */
+  .hero {
+    background: linear-gradient(135deg, #007aff, #0051a8);
+  }
+  .hero .title {
+    color: #fff;
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+  }
+  .hero .subtitle {
+    color: #e0e0e0;
+    font-size: 1.5rem;
+  }
+  .hero .button.is-primary {
+    background-color: #ff3b30;
+    border-color: #ff3b30;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  .hero .button.is-primary:hover {
+    background-color: #e0291e;
+    transform: translateY(-3px);
+  }
+  
+  /* FEATURES SECTION */
+  .feature-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+  }
+  
+  /* DEMO SECTION */
+  .has-background-light {
+    background: #fafafa;
+  }
+  .image img {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  /* STATISTICS SECTION */
+  .columns .heading {
+    font-size: 1rem;
+    color: #777;
+  }
+  .columns .title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* FOOTER */
+  .footer {
+    background: #fff;
+    padding: 2rem 1.5rem;
+    border-top: 1px solid #eaeaea;
+  }
+  .footer a {
+    color: #007aff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .footer a:hover {
+    color: #0051a8;
+    text-decoration: underline;
+  }
+  
+  /* RESPONSIVE Spacing Adjustments */
+  @media screen and (max-width: 768px) {
+    .hero .title {
+      font-size: 2.5rem;
+    }
+    .hero .subtitle {
+      font-size: 1.25rem;
+    }
+  }
+  
