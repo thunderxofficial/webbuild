@@ -14,9 +14,9 @@ function completeSetup() {
             localStorage.sites = JSON.stringify([]);
             location.assign("/builder/index.html");
         } else {
-            alert("Error: You are not elegible for our service beacuse you don't agree to the TOS.")
+            alert("You need to agree to the terms of service to continue.");
         }
     } else {
-        alert("Error: Please fill the username field.");
+        alert("Please fill the username field.");
     };
 };
