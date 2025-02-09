@@ -457,6 +457,7 @@ document.getElementById("export-html").addEventListener("click", function () {
 <head>
   <meta charset="UTF-8">
   <title>${document.getElementById("site-title").value} - ${page.name}</title>
+  <link rel="stylesheet" href="https://webbuild.js.org/builder/betabuilder/style.css">
   <style>
   ${globalAnimationCSS}
   ${page.css}
