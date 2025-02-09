@@ -459,6 +459,10 @@ document.getElementById("export-html").addEventListener("click", function () {
   <title>${document.getElementById("site-title").value} - ${page.name}</title>
   <link rel="stylesheet" href="https://webbuild.js.org/builder/betabuilder/style.css">
   <style>
+  body {
+    background-image: url(${document.getElementById("canvas-bg-image").value});
+    background-color: ${document.getElementById("canvas-bg-color").value};
+  }
   ${globalAnimationCSS}
   ${page.css}
   </style>
