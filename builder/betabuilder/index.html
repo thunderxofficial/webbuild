@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WebBuild</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- CodeMirror CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/codemirror.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/theme/neo.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="header-left">
+        <!-- Website name input (default value set by script) -->
+        <input type="text" id="site-title" placeholder="Website Name" />
+        <button id="undo-btn" class="btn undo-btn">Undo</button>
+        <button id="redo-btn" class="btn redo-btn">Redo</button>
+      </div>
+      <h1>WebBuild</h1>
+      <div class="header-right">
+        <button id="save-site" class="btn save-btn">Save</button>
+        <div class="autosave-container">
+          <label for="auto-save-toggle">Auto‑save:</label>
+          <input type="checkbox" id="auto-save-toggle" checked />
+          <span id="auto-save-indicator">Auto‑saved</span>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Top-Level Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="designer">Designer</button>
+      <button class="tab" data-tab="javascript">JavaScript</button>
+      <button class="tab" data-tab="css">CSS</button>
+    </div>
+    
+    <!-- Pages Navigation Bar -->
+    <div id="pages-nav">
+      <!-- The list of pages and the "Add Page" button will be injected here -->
+    </div>
+    
+    <!-- Designer Container -->
+    <div id="designer-container">
+      <div class="main-container">
+        <!-- Components Panel (Left Sidebar) -->
+        <aside id="components-panel">
+          <h2>Components</h2>
+          <button data-type="canvas" class="btn" id="canvas-settings-btn">
+            Canvas Settings
+          </button>
+          <!-- Group: Text Components -->
+          <div class="component-group">
+            <div class="group-title">Text</div>
+            <button data-type="heading" class="btn add-component">
+              Heading
+            </button>
+            <button data-type="subheading" class="btn add-component">
+              Subheading
+            </button>
+            <button data-type="paragraph" class="btn add-component">
+              Paragraph
+            </button>
+            <button data-type="quote" class="btn add-component">Quote</button>
+            <button data-type="codeblock" class="btn add-component">
+              Code Block
+            </button>
+          </div>
+          <br />
+          <!-- Group: Media Components -->
+          <div class="component-group">
+            <div class="group-title">Media</div>
+            <button data-type="image" class="btn add-component">Image</button>
+            <button data-type="video" class="btn add-component">Video</button>
+          </div>
+          <br />
+          <!-- Group: Interactive Components -->
+          <div class="component-group">
+            <div class="group-title">Interactive</div>
+            <button data-type="button" class="btn add-component">Button</button>
+            <button data-type="link" class="btn add-component">Link</button>
+            <button data-type="form" class="btn add-component">Form</button>
+          </div>
+          <br />
+          <!-- Group: Layout Components -->
+          <div class="component-group">
+            <div class="group-title">Layout</div>
+            <button data-type="divider" class="btn add-component">
+              Divider
+            </button>
+            <button data-type="container" class="btn add-component">
+              Container
+            </button>
+            <button data-type="list" class="btn add-component">List</button>
+          </div>
+          <hr />
+          <button id="clear-canvas" class="btn">Clear Canvas</button>
+          <button id="export-html" class="btn">Export HTML</button>
+        </aside>
+        
+        <!-- Canvas (Central Area) -->
+        <main class="canvas" id="canvas"></main>
+        
+        <!-- Settings Panel (Right Sidebar) -->
+        <aside id="settings-panel">
+          <h2>Settings</h2>
+          <div id="settings-content">
+            <p>Select an element to edit its settings.</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+    
+    <!-- JavaScript Container -->
+    <div id="javascript-container" style="display: none; padding: 1rem;">
+      <h2>JavaScript Editor</h2>
+      <textarea id="js-code"></textarea>
+    </div>
+    
+    <!-- CSS Container -->
+    <div id="css-container" style="display: none; padding: 1rem;">
+      <h2>Custom CSS</h2>
+      <textarea id="css-code"></textarea>
+    </div>
+    
+    <!-- Modals -->
+    
+    <!-- Export Modal (with larger textarea(s)) -->
+    <div id="export-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" data-modal="export-modal">&times;</span>
+        <h2>Exported HTML</h2>
+        <div id="export-contents">
+          <!-- One export textarea per page will be injected here -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal">
+      <div class="modal-content">
+        <h2>Delete Component</h2>
+        <p>Are you sure you want to delete this component?</p>
+        <div class="modal-actions">
+          <button id="confirm-delete" class="btn delete-btn">Delete</button>
+          <button id="cancel-delete" class="btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Clear Canvas Confirmation Modal -->
+    <div id="clear-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" data-modal="clear-modal">&times;</span>
+        <h2>Clear Canvas</h2>
+        <p>Are you sure you want to clear the canvas? This action cannot be undone.</p>
+        <div class="modal-actions">
+          <button id="confirm-clear" class="btn delete-btn">Clear</button>
+          <button id="cancel-clear" class="btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Prompt Modal (for Save fallback) -->
+    <div id="prompt-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" data-modal="prompt-modal">&times;</span>
+        <h2>Save Site</h2>
+        <p>Enter the site's name below:</p>
+        <input type="text" id="site-name-input" />
+        <div class="modal-actions">
+          <button id="save-prompt" class="btn">Save</button>
+          <button id="cancel-prompt" class="btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Alert Modal -->
+    <div id="alert-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" data-modal="alert-modal">&times;</span>
+        <h2>Alert</h2>
+        <p id="alert-message"></p>
+        <div class="modal-actions">
+          <button id="alert-ok" class="btn">OK</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Animation Modal -->
+    <div id="animation-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" data-modal="animation-modal">&times;</span>
+        <h2>Animation Settings</h2>
+        <label for="animation-type">Animation:</label>
+        <select id="animation-type">
+          <option value="slideFromLeft">Slide From Left</option>
+          <option value="fadeIn">Fade In</option>
+          <option value="zoomIn">Zoom In</option>
+          <option value="rotateIn">Rotate In</option>
+          <option value="bounceIn">Bounce In</option>
+        </select>
+        <label for="animation-trigger">Trigger:</label>
+        <select id="animation-trigger">
+          <option value="onLoad">On Load</option>
+          <option value="onClick">On Click</option>
+          <option value="onHover">On Hover</option>
+        </select>
+        <div class="modal-actions">
+          <button id="apply-animation" class="btn">Apply Animation</button>
+          <button id="cancel-animation" class="btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Effects Modal -->
+    <div id="effects-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" data-modal="effects-modal">&times;</span>
+        <h2>Effects Settings</h2>
+        <label for="effect-type">Effect:</label>
+        <select id="effect-type">
+          <option value="shake">Shake</option>
+          <option value="pulse">Pulse</option>
+          <option value="wiggle">Wiggle</option>
+          <option value="spin">Spin</option>
+          <option value="glow">Glow</option>
+        </select>
+        <div class="modal-actions">
+          <button id="apply-effect" class="btn">Apply Effect</button>
+          <button id="cancel-effect" class="btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- New Page Modal -->
+    <div id="newpage-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" data-modal="newpage-modal">&times;</span>
+        <h2>Create New Page</h2>
+        <label for="newpage-name">Page Name:</label>
+        <input type="text" id="newpage-name" placeholder="Page name" />
+        <label style="display: none;">
+          <input type="checkbox" id="newpage-password-toggle" disabled />
+          Password Protect (coming soon!)
+        </label>
+        <div id="newpage-password-container" style="display: none;">
+          <label for="newpage-password">Password:</label>
+          <input type="password" id="newpage-password" />
+        </div>
+        <div class="modal-actions">
+          <button id="create-page-btn" class="btn">Create Page</button>
+          <button id="cancel-newpage" class="btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- CodeMirror JS (and modes) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/css/css.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
