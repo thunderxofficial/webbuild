@@ -21,7 +21,7 @@ $(document).ready(function() {
 
     let newUrl = window.location.origin + window.location.pathname + '?' + urlParams.toString();
     window.history.replaceState(null, '', newUrl);
-    preview.innerHTML = sitecontent;
+    preview.innerHTML = HtmlSanitizer.SanitizeHtml(sitecontent);
 });
 
 if (!localStorage.getItem("setupCompleted")) {
