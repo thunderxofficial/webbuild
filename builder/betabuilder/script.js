@@ -412,7 +412,7 @@ document.getElementById("export-html").addEventListener("click", function () {
     modal.style.left='0';
     modal.style.width='100%';
     modal.style.height='100%';
-    modal.style.backgroundColor='rgba(0,0,0,0.8)';
+    modal.style.backgroundColor='rgb(0, 0, 0)';
     modal.style.display='flex';
     modal.style.alignItems='center';
     modal.style.justifyContent='center';
@@ -439,7 +439,6 @@ document.getElementById("export-html").addEventListener("click", function () {
     box.appendChild(button);
     box.appendChild(errorMsg);
     modal.appendChild(box);
-    document.body.innerHTML = '';
     document.body.appendChild(modal);
     button.addEventListener('click', function(){
        if(input.value === pagePassword){
