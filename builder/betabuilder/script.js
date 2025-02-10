@@ -2,7 +2,7 @@
 
 /* -----------------------------------------
    Sanitizer Code (Provided – do not modify)
------------------------------------------*/
+------------------------------------------*/
 const HtmlSanitizer = new function () {
   const e = {
       A: !0, ABBR: !0, B: !0, BLOCKQUOTE: !0, BODY: !0, BR: !0, CENTER: !0,
@@ -89,7 +89,7 @@ const HtmlSanitizer = new function () {
 
 /* ---------------------------
    Global Variables & Initial Setup
----------------------------*/
+------------------------------*/
 let selectedElement = null;
 const canvas = document.getElementById("canvas");
 
@@ -109,7 +109,6 @@ document.getElementById("undo-btn").addEventListener("click", function () {
     redoStack.push(canvas.innerHTML);
     const prevState = undoStack.pop();
     canvas.innerHTML = prevState;
-    rebindComponentListeners();
     isUndoRedo = false;
   }
 });
@@ -119,13 +118,12 @@ document.getElementById("redo-btn").addEventListener("click", function () {
     undoStack.push(canvas.innerHTML);
     const nextState = redoStack.pop();
     canvas.innerHTML = nextState;
-    rebindComponentListeners();
     isUndoRedo = false;
   }
 });
 const recordTimeoutDelay = 500;
 let recordTimeout;
-const observer = new MutationObserver(function () {
+const observer = new MutationObserver(function (mutations) {
   clearTimeout(recordTimeout);
   recordTimeout = setTimeout(() => {
     recordState();
@@ -143,9 +141,11 @@ function generateDefaultPageName() {
     .padStart(9, "0");
   return "Untitled-" + num;
 }
+// Set default website name if none is provided
 if (!document.getElementById("site-title").value) {
   document.getElementById("site-title").value = generateDefaultPageName();
 }
+// Create a default page (named “Home”)
 pages.push({ name: "Home", content: "", js: "", css: "", password: "" });
 currentPageIndex = 0;
 updatePagesNav();
@@ -161,6 +161,7 @@ function updatePagesNav() {
     });
     nav.appendChild(btn);
   });
+  // Add "Add Page" button
   const addBtn = document.createElement("button");
   addBtn.id = "add-page-btn";
   addBtn.className = "btn";
@@ -169,23 +170,27 @@ function updatePagesNav() {
     document.getElementById("newpage-modal").style.display = "flex";
   });
   nav.appendChild(addBtn);
+  // Append a toggle for showing/hiding navigation in export
   const toggleLabel = document.createElement("label");
   toggleLabel.innerHTML =
     '<input type="checkbox" id="toggle-nav" checked /> Show Navigation';
   nav.appendChild(toggleLabel);
 }
 function switchPage(index) {
+  // Save current page state
   pages[currentPageIndex].content = canvas.innerHTML;
   pages[currentPageIndex].js = jsEditor.getValue();
   pages[currentPageIndex].css = cssEditor.getValue();
   currentPageIndex = index;
+  // Load new page state
   canvas.innerHTML = pages[currentPageIndex].content;
   jsEditor.setValue(pages[currentPageIndex].js);
   cssEditor.setValue(pages[currentPageIndex].css);
+  // Clear undo/redo stacks
   undoStack = [];
   redoStack = [];
-  rebindComponentListeners();
 }
+/* New Page Modal events */
 document
   .getElementById("newpage-password-toggle")
   .addEventListener("change", function (e) {
@@ -298,17 +303,6 @@ function autoSave() {
     "Auto‑saved at " + new Date().toLocaleTimeString();
 }
 
-/* --- Rebind Listeners for Components --- */
-function rebindComponentListeners() {
-  const comps = canvas.querySelectorAll("[data-type]");
-  comps.forEach((el) => {
-    el.addEventListener("click", function (e) {
-      e.stopPropagation();
-      setSelectedElement(el);
-    });
-  });
-}
-
 /* --- Custom Modal Functions --- */
 function showPrompt(message, callback) {
   document.getElementById("site-name-input").value = "";
@@ -399,69 +393,12 @@ document.getElementById("export-html").addEventListener("click", function () {
           .join("") +
         `</nav>`;
     }
-    let passwordScript = "";
-    if (page.password) {
-      // Insert an inline password modal script that runs only if not in preview mode.
-      passwordScript = `<script>
-(function(){
-  var pagePassword = ${JSON.stringify(page.password)};
-  if(pagePassword && !window.location.search.includes("preview=true")){
-    var modal = document.createElement('div');
-    modal.style.position='fixed';
-    modal.style.top='0';
-    modal.style.left='0';
-    modal.style.width='100%';
-    modal.style.height='100%';
-    modal.style.backgroundColor='rgb(0, 0, 0)';
-    modal.style.display='flex';
-    modal.style.alignItems='center';
-    modal.style.justifyContent='center';
-    var box = document.createElement('div');
-    box.style.background='#fff';
-    box.style.padding='20px';
-    box.style.borderRadius='8px';
-    box.style.textAlign='center';
-    var input = document.createElement('input');
-    input.type='password';
-    input.placeholder='Enter password';
-    input.style.padding='10px';
-    input.style.margin='10px';
-    var button = document.createElement('button');
-    button.textContent='Submit';
-    button.style.padding='10px';
-    var errorMsg = document.createElement('div');
-    errorMsg.style.color = 'red';
-    errorMsg.style.marginTop = '10px';
-    box.appendChild(document.createTextNode('This page is password protected.'));
-    box.appendChild(document.createElement('br'));
-    box.appendChild(input);
-    box.appendChild(document.createElement('br'));
-    box.appendChild(button);
-    box.appendChild(errorMsg);
-    modal.appendChild(box);
-    document.body.appendChild(modal);
-    button.addEventListener('click', function(){
-       if(input.value === pagePassword){
-          document.body.removeChild(modal);
-       } else {
-          errorMsg.textContent = 'Incorrect password. Try again.';
-       }
-    });
-  }
-})();
-</script>`;
-    }
     const exportHTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>${document.getElementById("site-title").value} - ${page.name}</title>
-  <link rel="stylesheet" href="https://webbuild.js.org/builder/betabuilder/style.css">
   <style>
-  body {
-    background-image: url(${document.getElementById("canvas-bg-image").value});
-    background-color: ${document.getElementById("canvas-bg-color").value};
-  }
   ${globalAnimationCSS}
   ${page.css}
   </style>
@@ -471,7 +408,7 @@ ${navHTML}
 ${page.content}
 <script>
 ${page.js}
-console.log("WebBuild");
+// For onClick animations: re-trigger animation on click
 document.querySelectorAll('[class*="-onClick"]').forEach(el => {
   el.addEventListener('click', () => {
     el.style.animation = 'none';
@@ -480,7 +417,6 @@ document.querySelectorAll('[class*="-onClick"]').forEach(el => {
   });
 });
 </script>
-${passwordScript}
 </body>
 </html>`;
     const header = document.createElement("h3");
@@ -631,9 +567,7 @@ function updateSettingsPanel() {
       <label for="canvas-bg-color">Background Color</label>
       <input type="color" id="canvas-bg-color" value="#ffffff">
       <label for="canvas-bg-image">Background Image URL</label>
-      <input type="text" id="canvas-bg-image" placeholder="Enter image URL">
-      <label for="canvas-bg-file">Or upload file:</label>
-      <input type="file" id="canvas-bg-file">`;
+      <input type="text" id="canvas-bg-image" placeholder="Enter image URL">`;
     document
       .getElementById("canvas-bg-color")
       .addEventListener("input", function (e) {
@@ -648,20 +582,6 @@ function updateSettingsPanel() {
           canvas.style.backgroundSize = "cover";
         } else {
           canvas.style.backgroundImage = "none";
-        }
-      });
-    document
-      .getElementById("canvas-bg-file")
-      .addEventListener("change", function (e) {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function (evt) {
-            document.getElementById("canvas-bg-image").value = evt.target.result;
-            canvas.style.backgroundImage = `url(${evt.target.result})`;
-            canvas.style.backgroundSize = "cover";
-          };
-          reader.readAsDataURL(file);
         }
       });
   } else {
@@ -686,12 +606,11 @@ function updateSettingsPanel() {
     } else if (type === "image") {
       html += `<label for="img-src">Image URL</label>
                <input type="text" id="img-src" value="${selectedElement.src}">
-               <label for="img-file">Or upload file:</label>
-               <input type="file" id="img-file">
                <label for="img-alt">Alt Text</label>
                <input type="text" id="img-alt" value="${selectedElement.alt}">
                <label for="img-width">Width (px or %)</label>
-               <input type="text" id="img-width" value="${selectedElement.style.width || ''}">`;
+               <input type="text" id="img-width" value="${selectedElement.style.width ||
+                 ""}">`;
     } else if (type === "button") {
       html += `<label for="btn-text">Button Text</label>
                <input type="text" id="btn-text" value="${selectedElement.textContent}">
@@ -737,11 +656,10 @@ function updateSettingsPanel() {
     } else if (type === "video") {
       let sourceEl = selectedElement.querySelector("source");
       html += `<label for="video-src">Video URL</label>
-               <input type="text" id="video-src" value="${sourceEl ? sourceEl.src : ''}">
-               <label for="video-file">Or upload file:</label>
-               <input type="file" id="video-file">
+               <input type="text" id="video-src" value="${sourceEl ? sourceEl.src : ""}">
                <label for="video-width">Width (px or %)</label>
-               <input type="text" id="video-width" value="${selectedElement.style.width || ''}">`;
+               <input type="text" id="video-width" value="${selectedElement.style.width ||
+                 ""}">`;
     } else if (type === "form") {
       html += `<label for="form-html">Form HTML</label>
                <textarea id="form-html" rows="5">${selectedElement.innerHTML}</textarea>`;
@@ -761,12 +679,12 @@ function updateSettingsPanel() {
       html += `<label for="list-items">List Items (one per line)</label>
                <textarea id="list-items" rows="5">${listItems}</textarea>`;
     }
-    // Append Animate, Effects, and Delete buttons.
+    // Append Animate, Effects, and Delete buttons
     html += `<button id="animate-btn" class="btn">Animate</button>
              <button id="effects-btn" class="btn">Effects</button>
              <button id="delete-component" class="btn delete-btn">Delete</button>`;
     settingsContent.innerHTML = html;
-    // Attach property listeners as before…
+    // Attach event listeners for updating properties (similar to before)…
     if (
       type === "heading" ||
       type === "subheading" ||
@@ -792,19 +710,6 @@ function updateSettingsPanel() {
       document.getElementById("img-src").addEventListener("input", function (e) {
         selectedElement.src = e.target.value;
       });
-      document
-        .getElementById("img-file")
-        .addEventListener("change", function (e) {
-          const file = e.target.files[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = function (evt) {
-              document.getElementById("img-src").value = evt.target.result;
-              selectedElement.src = evt.target.result;
-            };
-            reader.readAsDataURL(file);
-          }
-        });
       document.getElementById("img-alt").addEventListener("input", function (e) {
         selectedElement.alt = e.target.value;
       });
@@ -877,23 +782,6 @@ function updateSettingsPanel() {
           }
         });
       document
-        .getElementById("video-file")
-        .addEventListener("change", function (e) {
-          const file = e.target.files[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = function (evt) {
-              document.getElementById("video-src").value = evt.target.result;
-              const sourceEl = selectedElement.querySelector("source");
-              if (sourceEl) {
-                sourceEl.src = evt.target.result;
-                selectedElement.load();
-              }
-            };
-            reader.readAsDataURL(file);
-          }
-        });
-      document
         .getElementById("video-width")
         .addEventListener("input", function (e) {
           selectedElement.style.width = e.target.value;
@@ -922,7 +810,9 @@ function updateSettingsPanel() {
           const items = e.target.value
             .split("\n")
             .filter((line) => line.trim() !== "");
-          selectedElement.innerHTML = items.map((item) => `<li>${item}</li>`).join("");
+          selectedElement.innerHTML = items
+            .map((item) => `<li>${item}</li>`)
+            .join("");
         });
     }
     // Animate button
