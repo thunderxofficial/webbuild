@@ -3,7 +3,7 @@
 ![Website](https://img.shields.io/website?url=https%3A%2F%2Fwebbuild.js.org)
 [![License](https://img.shields.io/github/license/thunderxofficial/webbuild)](https://github.com/thunderxofficial/webbuild/blob/main/LICENSE)
 
-> ⚠️ **This project is archived.** I no longer have any interest in web development or this project. It may be deleted at any moment. No further updates or support will be provided.
+> ⚠️ **This project is archived.** I no longer have any interest in web development or this project. It may be deleted at any moment. No further updates or support will be provided. This repository is archived and may be removed at any time.
 
 WebBuild is a **free**, open-source website builder designed to make website creation intuitive and accessible to everyone. Whether you're a seasoned developer or just starting, WebBuild provides the tools you need to easily create beautiful, responsive websites — right from your browser.
 
@@ -17,13 +17,13 @@ WebBuild is a **free**, open-source website builder designed to make website cre
 
 ## Try It Now
 
-Start building your website now with the **[WebBuild Builder](https://webbuild.js.org/builder/index.html)**.
+Start building your website now with the ~~**[WebBuild Builder](https://webbuild.js.org/builder/index.html)**~~.
 
 ## Getting Started
 
 To get started with WebBuild, simply visit the builder link and begin designing:
 
-- Visit: [WebBuild Builder](https://webbuild.js.org/builder/index.html)
+- Visit: ~~[WebBuild Builder](https://webbuild.js.org/builder/index.html)~~
 - Use the simple interface to add elements
 - Customize the elements using the properties panel
 - Publish your website when ready
@@ -34,8 +34,8 @@ To get started with WebBuild, simply visit the builder link and begin designing:
 
 ## Resources
 
-- **Website:** [https://webbuild.js.org](https://webbuild.js.org)
-- **Builder:** [https://webbuild.js.org/builder/index.html](https://webbuild.js.org/builder/index.html)
+- **Website:** ~~[https://webbuild.js.org](https://webbuild.js.org)~~
+- **Builder:** ~~[https://webbuild.js.org/builder/index.html](https://webbuild.js.org/builder/index.html)~~
 - **GitHub Repository:** [https://github.com/thunderxofficial/webbuild](https://github.com/thunderxofficial/webbuild)
 
 ## License
@@ -43,5 +43,3 @@ To get started with WebBuild, simply visit the builder link and begin designing:
 WebBuild is licensed under the Apache-2.0 License. See the [LICENSE](https://github.com/thunderxofficial/webbuild/blob/main/LICENSE) file for more details.
 
 ---
-
-> ⚠️ This repository is archived and may be removed at any time.
