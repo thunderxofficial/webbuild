@@ -1,7 +1,9 @@
-# WebBuild - Open Source Website Builder
+# WebBuild - Open Source Website Builder (Archived)
 
 ![Website](https://img.shields.io/website?url=https%3A%2F%2Fwebbuild.js.org)
-[![License](https://img.shields.io/github/license/boltxyzcode/webbuild)](https://github.com/boltxyzcode/webbuild/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/thunderxofficial/webbuild)](https://github.com/thunderxofficial/webbuild/blob/main/LICENSE)
+
+> ⚠️ **This project is archived.** I no longer have any interest in web development or this project. It may be deleted at any moment. No further updates or support will be provided.
 
 WebBuild is a **free**, open-source website builder designed to make website creation intuitive and accessible to everyone. Whether you're a seasoned developer or just starting, WebBuild provides the tools you need to easily create beautiful, responsive websites — right from your browser.
 
@@ -28,22 +30,18 @@ To get started with WebBuild, simply visit the builder link and begin designing:
 
 ## Contributing
 
-We welcome contributions from the community! If you're interested in improving WebBuild, fixing bugs, or adding new features:
-
-1. Fork the repository on GitHub.
-2. Create a new branch for your feature or bug fix.
-3. Submit a pull request with a clear description of your changes.
+> Contributions are no longer being accepted.
 
 ## Resources
 
 - **Website:** [https://webbuild.js.org](https://webbuild.js.org)
 - **Builder:** [https://webbuild.js.org/builder/index.html](https://webbuild.js.org/builder/index.html)
-- **GitHub Repository:** [https://github.com/boltxyzcode/webbuild](https://github.com/boltxyzcode/webbuild)
+- **GitHub Repository:** [https://github.com/thunderxofficial/webbuild](https://github.com/thunderxofficial/webbuild)
 
 ## License
 
-WebBuild is licensed under the Apache-2.0 License. See the [LICENSE](https://github.com/boltxyzcode/webbuild/blob/main/LICENSE) file for more details.
+WebBuild is licensed under the Apache-2.0 License. See the [LICENSE](https://github.com/thunderxofficial/webbuild/blob/main/LICENSE) file for more details.
 
 ---
 
-Start building the web today with **WebBuild**!
+> ⚠️ This repository is archived and may be removed at any time.
